@@ -55,7 +55,6 @@ final class FetchPostsView: UIView {
         }
     }
 
-
     // MARK: - Private UI elements
     // TODO: Create a Design System for labels, texts, fonts and colors
     private let activityIndicator: UIActivityIndicatorView = {
