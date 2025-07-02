@@ -13,7 +13,7 @@ final class FetchPostsViewController: UIViewController {
     private let service: FetchPostsService
 
     init(contentView: FetchPostsView = FetchPostsView(),
-        service: FetchPostsService = FetchPostsService()) {
+         service: FetchPostsService = FetchPostsService()) {
         self.contentView = contentView
         self.service = service
 
