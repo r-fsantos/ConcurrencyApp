@@ -20,10 +20,6 @@ final class FetchPostsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    deinit {
-        print("\(self) deinitialized")
-    }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

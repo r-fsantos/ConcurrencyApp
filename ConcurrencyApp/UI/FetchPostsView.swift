@@ -97,10 +97,6 @@ final class FetchPostsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        print("\(self) deinit")
-    }
-
     // MARK: - Public methods
     func update(with newState: ViewState) {
         currentState = newState
