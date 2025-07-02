@@ -7,12 +7,6 @@
 
 import UIKit
 
-protocol ViewCodable: AnyObject {
-    func setupViewCode()
-    func buildHierarchy()
-    func setupConstraints()
-}
-
 final class FetchPostsView: UIView {
     // MARK: - View state properties
     private(set) var currentState: ViewState = .idle {
