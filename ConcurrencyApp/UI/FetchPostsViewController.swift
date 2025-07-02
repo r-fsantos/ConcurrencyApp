@@ -53,9 +53,8 @@ extension FetchPostsViewController: FetchPostsViewButtonDelegate {
 extension FetchPostsViewController {
     private func executeServiceAndUpdateUI() {
         service.fetchPosts { [weak self] result in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                guard let self = self else { return }
-
                 switch result {
                 case .success(let posts):
                     self.contentView.update(with: .success("Success! Fetched \(posts.count) posts."))
