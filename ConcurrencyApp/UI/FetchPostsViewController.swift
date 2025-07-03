@@ -11,11 +11,15 @@ import SwiftUI
 final class FetchPostsViewController: UIViewController {
     private let contentView: FetchPostsView
     private let service: FetchPostsService
+    private let dispatchQueue: DispatchQueue
 
     init(contentView: FetchPostsView = FetchPostsView(),
-         service: FetchPostsService = FetchPostsService()) {
+         service: FetchPostsService = FetchPostsService(),
+         dispatchQueue: DispatchQueue = DispatchQueue(label: "com.renato.example.fetchQueue")
+    ) {
         self.contentView = contentView
         self.service = service
+        self.dispatchQueue = dispatchQueue
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -42,9 +46,7 @@ extension FetchPostsViewController: FetchPostsViewButtonDelegate {
         print("didTapButton on contentView: \(contentView)")
         contentView.update(with: .loading("Fetching data..."))
 
-        let queue = DispatchQueue(label: "com.renato.example.fetchQueue")
-
-        queue.async { [self] in
+        dispatchQueue.async { [self] in
             executeServiceAndUpdateUI()
         }
     }
