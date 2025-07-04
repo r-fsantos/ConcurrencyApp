@@ -20,7 +20,6 @@ final class FetchPostsViewController: UIViewController {
         self.contentView = contentView
         self.service = service
         self.dispatchQueue = dispatchQueue
-
         super.init(nibName: nil, bundle: nil)
     }
 
