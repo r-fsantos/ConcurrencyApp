@@ -7,61 +7,55 @@
 
 import Foundation
 
-// Important note for Xcode Playgrounds:
-// If you are running this in an Xcode Playground, you might need to
-// add `PlaygroundSupport.PlaygroundPage.current.needsIndefiniteExecution = true`
-// at the top to allow asynchronous operations to complete.
-
-// ApiClient class responsible for making network requests.
+// TODO: Abstract protocol
 final class FetchPostsService {
-    // MARK: - Properties
-    private let baseURL = "https://jsonplaceholder.typicode.com"
+    // MARK: Private properties
+    private let request: URLRequest
+    private let jsonDecoder: JsonDecodable
+    private let session: URLSession
+    private var task: URLSessionDataTask?
 
     // MARK: - Public Methods
+    init(
+        request: URLRequest = PostsEndpoint.fetchPosts.request,
+        jsonDecoder: JsonDecodable = CustomJsonDecoder(),
+        session: URLSession = URLSession.shared
+    ) {
+        self.request = request
+        self.jsonDecoder = jsonDecoder
+        self.session = session
+    }
 
     /// Fetches a list of posts from the JSONPlaceholder API.
     /// - Parameter completion: A closure that is called when the request completes.
     ///   It returns a Result enum, either containing an array of Posts on success
     ///   or an APIError on failure.
     func fetchPosts(completion: @escaping (Result<[Post], APIError>) -> Void) {
-        // Construct the full URL for the /posts endpoint.
-        guard let url = URL(string: "\(baseURL)/posts") else {
-            completion(.failure(.invalidURL))
-            return
-        }
+        task = session.dataTask(
+            with: request
+        ) { data, response, error in
 
-        // Create a URLSession data task.
-        // This task will handle the network request and provide a response, data, or error.
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            // Ensure the completion handler is called on the main thread,
-            // especially if this data will update UI.
-            //            DispatchQueue.main.async {
-            // Check for network errors first.
             if let error = error {
                 completion(.failure(.networkError(error)))
                 return
             }
 
-            // Ensure data was received.
             guard let data = data else {
                 completion(.failure(.unknownError))
                 return
             }
 
-            // Attempt to decode the JSON data into an array of Post objects.
             do {
-                let decoder = JSONDecoder()
-                // Set the key decoding strategy if your JSON keys don't match Swift conventions
-                // decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let posts = try decoder.decode([Post].self, from: data)
+                let posts = try self.jsonDecoder.decode([Post].self, from: data)
                 completion(.success(posts))
             } catch {
-                // If decoding fails, return a decoding error.
                 completion(.failure(.decodingError(error)))
             }
-            //            }
         }
-        // Start the network request.
-        task.resume()
+        task?.resume()
+    }
+
+    func cancelFetch() {
+        task?.cancel()
     }
 }
