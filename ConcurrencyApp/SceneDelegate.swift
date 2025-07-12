@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(windowScene: windowScene)
 
-        let controller = ViewController()
+        let controller = FetchPostsViewController()
         let uiNavController = UINavigationController(
             rootViewController: controller
         )
